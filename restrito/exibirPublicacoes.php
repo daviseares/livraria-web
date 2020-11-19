@@ -1,14 +1,28 @@
-<HTML>
+<?php
+include_once('../classes/Publicacao.php');
+
+
+session_start();
+
+
+$publicacoes = $_SESSION['publicacoes'];
+
+
+?>
+<html>
 
 <head>
-    <title>Pagina Inicial</title>
+    <title>Publicações do acervo</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" type="text/css" href="../css/estilo.css">
 </head>
 
 <body>
+
     <div class="container">
-        <div class="topo"></div>
+        <div class="topo">
+
+        </div>
 
         <div class="barra">
             <nav>
@@ -17,7 +31,7 @@
                     <li><a href="#">Quem somos?</a></li>
                     <li><a href="#">Clientes</a>
                         <ul>
-                            <li><a href="#">Cadastrar</a></li>
+                            <li><a href="formCliente.php">Cadastrar</a></li>
                             <li><a href="../controllers/clienteController.php?option=2">Consultar Todos</a></li>
                         </ul>
                     </li>
@@ -49,28 +63,66 @@
         <div class="breadcrumb">
             <ul>
                 <li><a href="../index.html">Página Inicial</a></li>
-                <li>Cadastrar Cliente</li>
+                <li>Publicações do acervo</li>
             </ul>
         </div>
         <div class="divider"></div>
-        <form action="../controllers/clienteController.php" class="formAutor">
-            <p class="cad-autor-title">CADASTRAR CLIENTE</p><br>
-            <input type="text" name="fcpf" placeholder="Cpf" required>
-            <input type="text" name="fnome" placeholder="Nome" required>
-            <input type="text" name="flogradouro" placeholder="Logradouro" required>
-            <input type="text" name="fcidade" placeholder="Cidade" required>
-            <input type="text" name="festado" placeholder="Estado" required>
-            <input type="text" name="fcep" placeholder="CEP" required>
-            <input type="date" name="fdata_nascimento" required>
-            <input type="email" name="femail" placeholder="E-mail" required>
-            <input type="text" name="fsenha" placeholder="Senha" required>
-            <input type="text" name="frg" placeholder="RG(somente números)" required>
-            <input type="text" name="ftipo" placeholder="0 ou 1" required>
-            <input type="hidden" name="option" value="1">
-            <button type="submit">CADASTRAR</button>
-        </form>
+
+        <?php
+
+        foreach ($publicacoes as $p) {
+            $preco = $p->getPreco();
+            $editora = $p->getEditora();
+            $autor = $p->getAutor();
+            $titulo = $p->getTitulo();
+
+            $isbn = $p->getIsbn();
+
+            echo "
+            <table border='0' width='50%' cellspacing='5'>
+                <tr>
+                    <td rowspan='5' align='center'><img src='../imagens/book_$isbn.jpg' width='200' height='200' border='0'></td>
+                </tr>
+                <tr align='left'>
+                    <td>
+                        <b>
+                            <font face='Verdana' size='3'>
+                            $titulo
+                            </font>
+                        </b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <font face='Verdana' size='3'>
+                        Autor: $autor
+                        </font>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <font face='Verdana' size='2'>
+                           Editora: $editora
+                        </font>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <b>
+                            <font face='Verdana' size='5' color='red'>R$ $preco</font>
+                        </b>
+                    </td>
+                    <td><a href='#'><img src='../imagens/botao_comprar2.png' border='0'></a></td>
+                </tr>
+            </table>
+
+             <hr width='50%'>
+            ";
+        }
+
+        ?>
 
     </div>
-</body>
 
+</body>
 </html>
